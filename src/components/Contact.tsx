@@ -21,7 +21,7 @@ const Contact = () => {
     const message = (formData.get("message") as string).trim();
 
     try {
-      const { data, error } = await supabase.functions.invoke("mailchimp-subscribe", {
+      const { data, error } = await supabase.functions.invoke("send-contact-email", {
         body: { name, email, interest, message },
       });
 
