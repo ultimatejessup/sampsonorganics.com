@@ -1,15 +1,42 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
-import { Mail, MapPin, Phone, Send } from "lucide-react";
+import { Mail, MapPin, Phone, Send, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
 
 const Contact = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+
+    const formData = new FormData(e.currentTarget);
+    const name = (formData.get("name") as string).trim();
+    const email = (formData.get("email") as string).trim();
+    const interest = formData.get("interest") as string;
+    const message = (formData.get("message") as string).trim();
+
+    try {
+      const { data, error } = await supabase.functions.invoke("mailchimp-subscribe", {
+        body: { name, email, interest, message },
+      });
+
+      if (error) throw error;
+
+      setSubmitted(true);
+    } catch (err: any) {
+      toast({
+        title: "Something went wrong",
+        description: err.message || "Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -98,6 +125,7 @@ const Contact = () => {
                 <div>
                   <input
                     type="text"
+                    name="name"
                     required
                     placeholder="Your Name"
                     className="w-full px-4 py-3 bg-card border border-border rounded-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-gold transition-colors"
@@ -106,6 +134,7 @@ const Contact = () => {
                 <div>
                   <input
                     type="email"
+                    name="email"
                     required
                     placeholder="Your Email"
                     className="w-full px-4 py-3 bg-card border border-border rounded-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-gold transition-colors"
@@ -113,6 +142,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <select
+                    name="interest"
                     className="w-full px-4 py-3 bg-card border border-border rounded-sm text-foreground focus:outline-none focus:border-gold transition-colors"
                     defaultValue=""
                   >
@@ -128,6 +158,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <textarea
+                    name="message"
                     required
                     placeholder="Your Message"
                     rows={4}
@@ -136,9 +167,17 @@ const Contact = () => {
                 </div>
                 <button
                   type="submit"
-                  className="w-full px-8 py-4 bg-gold text-gold-foreground font-semibold rounded-sm uppercase tracking-widest text-sm hover:brightness-110 transition-all"
+                  disabled={loading}
+                  className="w-full px-8 py-4 bg-gold text-gold-foreground font-semibold rounded-sm uppercase tracking-widest text-sm hover:brightness-110 transition-all disabled:opacity-50"
                 >
-                  Send Message
+                  {loading ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Sending...
+                    </span>
+                  ) : (
+                    "Send Message"
+                  )}
                 </button>
               </form>
             )}
