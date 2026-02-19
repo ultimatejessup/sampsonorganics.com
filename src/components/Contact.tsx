@@ -1,6 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
-import { Mail, MapPin, Phone, Send, Loader2 } from "lucide-react";
+import { Mail, Phone, Send, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 
@@ -72,11 +72,11 @@ const Contact = () => {
             <div className="space-y-5">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-primary rounded-sm flex items-center justify-center">
-                  <MapPin className="w-5 h-5 text-gold" />
+                  <Mail className="w-5 h-5 text-gold" />
                 </div>
                 <div>
-                  <p className="font-semibold text-foreground">Location</p>
-                  <p className="text-muted-foreground">Michigan, USA</p>
+                  <p className="font-semibold text-foreground">Mailing Address</p>
+                  <p className="text-muted-foreground">PO Box 6613, Detroit, Michigan 48203</p>
                 </div>
               </div>
 
@@ -96,7 +96,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <p className="font-semibold text-foreground">Phone</p>
-                  <p className="text-muted-foreground">Contact us via email</p>
+                  <p className="text-muted-foreground">313-451-1274</p>
                 </div>
               </div>
             </div>
