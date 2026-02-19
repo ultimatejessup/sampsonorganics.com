@@ -12,7 +12,7 @@ serve(async (req) => {
   }
 
   try {
-    const { email, name, interest, message } = await req.json();
+    const { email, name, phone, emailOptIn, smsOptIn } = await req.json();
 
     if (!email || !name) {
       throw new Error("Email and name are required");
@@ -21,14 +21,24 @@ serve(async (req) => {
     const API_KEY = Deno.env.get("MAILCHIMP_API_KEY") || "";
     const AUDIENCE_ID = Deno.env.get("MAILCHIMP_AUDIENCE_ID") || "";
 
-    // Extract data center from API key (e.g., "us16")
     const dc = API_KEY.split("-").pop();
-
     const url = `https://${dc}.api.mailchimp.com/3.0/lists/${AUDIENCE_ID}/members`;
 
     const nameParts = name.trim().split(" ");
     const firstName = nameParts[0] || "";
     const lastName = nameParts.slice(1).join(" ") || "";
+
+    const tags: string[] = [];
+    if (emailOptIn) tags.push("Email Opt-In");
+    if (smsOptIn) tags.push("SMS Opt-In");
+
+    const mergeFields: Record<string, string> = {
+      FNAME: firstName,
+      LNAME: lastName,
+    };
+    if (phone && smsOptIn) {
+      mergeFields.PHONE = phone;
+    }
 
     const response = await fetch(url, {
       method: "POST",
@@ -39,11 +49,8 @@ serve(async (req) => {
       body: JSON.stringify({
         email_address: email,
         status: "subscribed",
-        merge_fields: {
-          FNAME: firstName,
-          LNAME: lastName,
-        },
-        tags: [interest || "General Inquiry"],
+        merge_fields: mergeFields,
+        tags,
       }),
     });
 
@@ -58,6 +65,7 @@ serve(async (req) => {
       status: 200,
     });
   } catch (error) {
+    console.error("Mailchimp error:", error);
     return new Response(JSON.stringify({ error: error.message }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 500,

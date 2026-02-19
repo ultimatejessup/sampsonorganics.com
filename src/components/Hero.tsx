@@ -1,7 +1,11 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
 import heroImg from "@/assets/hero-farm.jpg";
+import NewsletterModal from "./NewsletterModal";
 
 const Hero = () => {
+  const [showNewsletter, setShowNewsletter] = useState(false);
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background image */}
@@ -59,13 +63,15 @@ const Hero = () => {
           >
             Our Mission
           </a>
-          <a
-            href="#contact"
+          <button
+            onClick={() => setShowNewsletter(true)}
             className="inline-block px-8 py-4 border-2 border-gold text-gold font-semibold rounded-sm uppercase tracking-widest text-sm hover:bg-gold hover:text-gold-foreground transition-all"
           >
             Get in Touch
-          </a>
+          </button>
         </motion.div>
+
+        <NewsletterModal open={showNewsletter} onClose={() => setShowNewsletter(false)} />
       </div>
 
       {/* Scroll indicator */}
