@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Mail, Phone } from "lucide-react";
+import { Mail, Phone, Instagram } from "lucide-react";
 import logo from "@/assets/logo.png";
 import NewsletterModal from "./NewsletterModal";
 
@@ -45,6 +45,12 @@ const Footer = () => {
                 <Mail className="w-4 h-4 text-gold shrink-0" />
                 <a href="mailto:info@sampsonorganics.com" className="text-primary-foreground/60 text-sm hover:text-gold transition-colors">
                   info@sampsonorganics.com
+                </a>
+              </div>
+              <div className="flex items-center gap-3">
+                <Instagram className="w-4 h-4 text-gold shrink-0" />
+                <a href="https://instagram.com/sampson.organics" target="_blank" rel="noopener noreferrer" className="text-primary-foreground/60 text-sm hover:text-gold transition-colors">
+                  @sampson.organics
                 </a>
               </div>
             </div>
