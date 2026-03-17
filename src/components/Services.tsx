@@ -1,7 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import landscapingImg from "@/assets/landscaping.jpg";
-import { Flower2, TreePine, Shovel } from "lucide-react";
+import { Flower2, Shovel } from "lucide-react";
 
 const services = [
   {
