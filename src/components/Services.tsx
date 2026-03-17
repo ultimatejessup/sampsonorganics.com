@@ -10,11 +10,6 @@ const services = [
     desc: "Custom organic garden layouts tailored to your space, climate, and goals.",
   },
   {
-    icon: TreePine,
-    title: "Landscape Consultation",
-    desc: "Private consultations for sustainable landscaping that thrives naturally.",
-  },
-  {
     icon: Shovel,
     title: "Soil & Land Prep",
     desc: "Soil analysis, composting guidance, and land preparation for productive growing.",
