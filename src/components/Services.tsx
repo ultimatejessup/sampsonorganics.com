@@ -1,18 +1,13 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import landscapingImg from "@/assets/landscaping.jpg";
-import { Flower2, TreePine, Shovel } from "lucide-react";
+import { Flower2, Shovel } from "lucide-react";
 
 const services = [
   {
     icon: Flower2,
     title: "Garden Design",
     desc: "Custom organic garden layouts tailored to your space, climate, and goals.",
-  },
-  {
-    icon: TreePine,
-    title: "Landscape Consultation",
-    desc: "Private consultations for sustainable landscaping that thrives naturally.",
   },
   {
     icon: Shovel,
