@@ -9,7 +9,7 @@ const Navbar = () => {
   const links = [
     { label: "Mission", href: "#mission" },
     { label: "Services", href: "#services" },
-    { label: "Shop", href: "#shop" },
+    { label: "Market", href: "#shop" },
     { label: "Contact", href: "#contact" },
   ];
 
