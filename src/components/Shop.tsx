@@ -28,7 +28,7 @@ const products = [
     price: "$34.99",
     priceId: "",
     description: "Beautiful, low-maintenance jade plant. A symbol of prosperity and growth.",
-    images: [jadePlant1, jadePlant2],
+    images: [jadePlant2, jadePlant1],
   },
 ];
 
@@ -80,16 +80,13 @@ const Shop = () => {
           transition={{ duration: 0.7 }}
           className="text-center max-w-2xl mx-auto mb-14"
         >
-          <p className="text-gold font-medium uppercase tracking-[0.2em] text-sm mb-4">
-            Merch Store
-          </p>
+          <p className="text-gold font-medium uppercase tracking-[0.2em] text-sm mb-4">Sampson's Market</p>
           <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-6">
-            Wear the <span className="text-gradient-gold">Movement</span>
+            Genuine.<span className="text-gradient-gold">Organic</span>
           </h2>
           <p className="text-muted-foreground text-lg leading-relaxed">
-            Rep Sampson Organics with our branded merchandise. Every purchase
-            supports our mission to bring sustainable agriculture to underserved
-            communities.
+            Every purchase supports our mission to bring sustainable agriculture to underserved communities. Build the
+            movement purchase our branded gear, plants and more.
           </p>
         </motion.div>
 
@@ -117,13 +114,9 @@ const Shop = () => {
                       {product.images.map((img, idx) => (
                         <button
                           key={idx}
-                          onClick={() =>
-                            setActiveImage((prev) => ({ ...prev, [product.name]: idx }))
-                          }
+                          onClick={() => setActiveImage((prev) => ({ ...prev, [product.name]: idx }))}
                           className={`w-12 h-12 rounded-sm overflow-hidden border-2 transition-colors ${
-                            getCurrentImage(product.name) === idx
-                              ? "border-gold"
-                              : "border-border hover:border-gold/50"
+                            getCurrentImage(product.name) === idx ? "border-gold" : "border-border hover:border-gold/50"
                           }`}
                         >
                           <img src={img} alt="" className="w-full h-full object-cover" />
@@ -135,13 +128,9 @@ const Shop = () => {
               ) : product.emoji ? (
                 <div className="text-6xl mb-5">{product.emoji}</div>
               ) : null}
-              <h3 className="font-display text-xl font-bold text-foreground mb-1">
-                {product.name}
-              </h3>
+              <h3 className="font-display text-xl font-bold text-foreground mb-1">{product.name}</h3>
               <p className="text-gold font-semibold text-lg mb-3">{product.price}</p>
-              <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
-                {product.description}
-              </p>
+              <p className="text-muted-foreground text-sm mb-6 leading-relaxed">{product.description}</p>
               <button
                 onClick={() => handleCheckout(product.priceId)}
                 disabled={loading === product.priceId}
