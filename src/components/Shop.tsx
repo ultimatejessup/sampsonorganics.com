@@ -3,6 +3,9 @@ import { useRef, useState } from "react";
 import { ShoppingBag, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import sampsonTshirtImg from "@/assets/sampson-tshirt.png";
+import jadePlant1 from "@/assets/jade-plant-1.jpeg";
+import jadePlant2 from "@/assets/jade-plant-2.jpeg";
 
 const products = [
   {
@@ -10,14 +13,22 @@ const products = [
     price: "$25.00",
     priceId: "price_1SyyKlK1wvlIdw9tWj07B8kp",
     description: "Soft, premium tee with embroidered logo. Wear the mission.",
-    emoji: "👕",
+    images: [sampsonTshirtImg],
   },
   {
     name: "Sampson Organics Hoodie",
     price: "$45.00",
     priceId: "price_1SyyLNK1wvlIdw9tNqDw2gbY",
     description: "Cozy pullover hoodie with front logo print. Stay warm, stay rooted.",
+    images: [],
     emoji: "🧥",
+  },
+  {
+    name: "Jade Plant",
+    price: "$34.99",
+    priceId: "",
+    description: "Beautiful, low-maintenance jade plant. A symbol of prosperity and growth.",
+    images: [jadePlant1, jadePlant2],
   },
 ];
 
@@ -25,8 +36,16 @@ const Shop = () => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
   const [loading, setLoading] = useState<string | null>(null);
+  const [activeImage, setActiveImage] = useState<Record<string, number>>({});
 
   const handleCheckout = async (priceId: string) => {
+    if (!priceId) {
+      toast({
+        title: "Coming soon",
+        description: "This product will be available for purchase soon!",
+      });
+      return;
+    }
     setLoading(priceId);
     try {
       const { data, error } = await supabase.functions.invoke("create-checkout", {
@@ -46,6 +65,10 @@ const Shop = () => {
     } finally {
       setLoading(null);
     }
+  };
+
+  const getCurrentImage = (productName: string) => {
+    return activeImage[productName] || 0;
   };
 
   return (
@@ -70,16 +93,48 @@ const Shop = () => {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {products.map((product, i) => (
             <motion.div
-              key={product.priceId}
+              key={product.name}
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.2 + i * 0.15 }}
-              className="bg-background border border-border rounded-sm p-8 text-center flex flex-col items-center"
+              className="bg-background border border-border rounded-sm p-6 text-center flex flex-col items-center"
             >
-              <div className="text-6xl mb-5">{product.emoji}</div>
+              {product.images && product.images.length > 0 ? (
+                <div className="w-full mb-5">
+                  <div className="aspect-square overflow-hidden rounded-sm mb-2">
+                    <img
+                      src={product.images[getCurrentImage(product.name)]}
+                      alt={product.name}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                  {product.images.length > 1 && (
+                    <div className="flex gap-2 justify-center">
+                      {product.images.map((img, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() =>
+                            setActiveImage((prev) => ({ ...prev, [product.name]: idx }))
+                          }
+                          className={`w-12 h-12 rounded-sm overflow-hidden border-2 transition-colors ${
+                            getCurrentImage(product.name) === idx
+                              ? "border-gold"
+                              : "border-border hover:border-gold/50"
+                          }`}
+                        >
+                          <img src={img} alt="" className="w-full h-full object-cover" />
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : product.emoji ? (
+                <div className="text-6xl mb-5">{product.emoji}</div>
+              ) : null}
               <h3 className="font-display text-xl font-bold text-foreground mb-1">
                 {product.name}
               </h3>
@@ -90,14 +145,14 @@ const Shop = () => {
               <button
                 onClick={() => handleCheckout(product.priceId)}
                 disabled={loading === product.priceId}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gold text-gold-foreground font-semibold rounded-sm uppercase tracking-widest text-xs hover:brightness-110 transition-all disabled:opacity-60"
+                className="mt-auto inline-flex items-center gap-2 px-6 py-3 bg-gold text-gold-foreground font-semibold rounded-sm uppercase tracking-widest text-xs hover:brightness-110 transition-all disabled:opacity-60"
               >
                 {loading === product.priceId ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
                   <ShoppingBag className="w-4 h-4" />
                 )}
-                Buy Now
+                {product.priceId ? "Buy Now" : "Coming Soon"}
               </button>
             </motion.div>
           ))}
