@@ -1,1 +1,4 @@
 project_id = "whbypedyekmafzehweut"
+
+[functions.list-products]
+verify_jwt = false
