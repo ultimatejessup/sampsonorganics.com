@@ -26,7 +26,7 @@ const products = [
   {
     name: "Jade Plant",
     price: "$34.99",
-    priceId: "",
+    priceId: "price_1TaQciK1wvlIdw9tmeQDQZQK",
     description: "Beautiful, low-maintenance jade plant. A symbol of prosperity and growth.",
     images: [jadePlant2, jadePlant1],
   },
