@@ -12,7 +12,7 @@ serve(async (req) => {
   }
 
   try {
-    const { email, name, phone, emailOptIn, smsOptIn } = await req.json();
+    const { email, name, phone, emailOptIn, smsOptIn, tags: extraTags } = await req.json();
 
     if (!email || !name) {
       throw new Error("Email and name are required");
@@ -31,6 +31,14 @@ serve(async (req) => {
     const tags: string[] = [];
     if (emailOptIn) tags.push("Email Opt-In");
     if (smsOptIn) tags.push("SMS Opt-In");
+
+    // Interest tags from the SNOWSOC survey. Allowlisted so callers can't create arbitrary tags.
+    const ALLOWED_INTEREST_TAGS = ["Workshop", "Plant Exchange"];
+    if (Array.isArray(extraTags)) {
+      for (const t of extraTags) {
+        if (ALLOWED_INTEREST_TAGS.includes(t) && !tags.includes(t)) tags.push(t);
+      }
+    }
 
     const mergeFields: Record<string, string> = {
       FNAME: firstName,

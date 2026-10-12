@@ -14,7 +14,95 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      survey_contacts: {
+        Row: {
+          created_at: string
+          email: string | null
+          email_opt_in: boolean
+          id: string
+          interests: string[]
+          name: string
+          phone: string | null
+          response_id: string
+          sms_opt_in: boolean
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          email_opt_in?: boolean
+          id?: string
+          interests?: string[]
+          name: string
+          phone?: string | null
+          response_id: string
+          sms_opt_in?: boolean
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          email_opt_in?: boolean
+          id?: string
+          interests?: string[]
+          name?: string
+          phone?: string | null
+          response_id?: string
+          sms_opt_in?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "survey_contacts_response_id_fkey"
+            columns: ["response_id"]
+            isOneToOne: false
+            referencedRelation: "survey_responses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      survey_responses: {
+        Row: {
+          barriers: string[]
+          barriers_other: string | null
+          buy_vs_grow: string | null
+          confidence: string | null
+          created_at: string
+          gardening_associations: string | null
+          id: string
+          interest_herbal: string | null
+          interest_sustainable: string | null
+          plant_exchange: string | null
+          survey_version: string
+          workshop_attendance: string | null
+        }
+        Insert: {
+          barriers?: string[]
+          barriers_other?: string | null
+          buy_vs_grow?: string | null
+          confidence?: string | null
+          created_at?: string
+          gardening_associations?: string | null
+          id: string
+          interest_herbal?: string | null
+          interest_sustainable?: string | null
+          plant_exchange?: string | null
+          survey_version?: string
+          workshop_attendance?: string | null
+        }
+        Update: {
+          barriers?: string[]
+          barriers_other?: string | null
+          buy_vs_grow?: string | null
+          confidence?: string | null
+          created_at?: string
+          gardening_associations?: string | null
+          id?: string
+          interest_herbal?: string | null
+          interest_sustainable?: string | null
+          plant_exchange?: string | null
+          survey_version?: string
+          workshop_attendance?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
